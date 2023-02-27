@@ -7,7 +7,7 @@ import { Route, Switch } from 'react-router-dom';
 import { ConnectedRouter } from 'react-router-redux';
 
 import App from './components/App';
-//fewfw
+//fewfwfew
 ReactDOM.render((
   <Provider store={store}>
     <ConnectedRouter history={history}>
