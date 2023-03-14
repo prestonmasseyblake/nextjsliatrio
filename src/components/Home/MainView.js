@@ -1,8 +1,9 @@
 import ArticleList from '../ArticleList';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import agent from '../../agent';
 import { connect } from 'react-redux';
 import { CHANGE_TAB } from '../../constants/actionTypes';
+import axios from 'axios';
 
 const YourFeedTab = props => {
   if (props.token) {
@@ -66,6 +67,18 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const MainView = props => {
+  const [articles, setArticles] = useState();
+  const [loading, setLoading] = useState(false);
+    useEffect(() => {
+      axios.get("http://localhost:8000/articles/").then((response) => {
+        console.log(response.data);
+        setArticles(response.data);
+        console.log("changing")
+        setLoading(true);
+        // setPost(response.data);
+      });
+    },[])
+
   return (
     <div className="col-md-9">
       <div className="feed-toggle">
@@ -75,20 +88,22 @@ const MainView = props => {
             token={props.token}
             tab={props.tab}
             onTabClick={props.onTabClick} />
-
           <GlobalFeedTab tab={props.tab} onTabClick={props.onTabClick} />
-
           <TagFilterTab tag={props.tag} />
-
         </ul>
       </div>
-
-      <ArticleList
+      { loading ? <div>
+        <ArticleList
+        data={articles}
         pager={props.pager}
         articles={props.articles}
         loading={props.loading}
         articlesCount={props.articlesCount}
-        currentPage={props.currentPage} />
+        currentPage={props.currentPage} 
+        />
+        </div> : <p>Loading...</p> }
+     
+        
     </div>
   );
 };
